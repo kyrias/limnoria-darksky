@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 from urllib.parse import urlunsplit, urlencode
 
 from supybot import utils
@@ -14,6 +15,7 @@ def retrying_get_url_content(url, retries=0):
         return retrying_get_url_content(url, retries=retries-1)
 
 
+@lru_cache(maxsize=128)
 def get_coordinates(api_key, location):
     geonames = GoogleV3(api_key=api_key, timeout=2)
     return geonames.geocode(location)
