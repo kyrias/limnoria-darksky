@@ -78,7 +78,7 @@ class DarkSky(callbacks.Plugin):
         except utils.web.Error as e:
             self.log.error('Could not look up forecast: {!r}', e)
 
-        self.log.info(json.dumps(forecast))
+        self.log.debug('Forecast response: {}'.format(json.dumps(forecast)))
         formatted = local_utils.format_forecast(forecast, loc)
         irc.reply(formatted)
     forecast = wrap(forecast, ['text'])
