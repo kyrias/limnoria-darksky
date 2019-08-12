@@ -120,6 +120,9 @@ def format_forecast(forecast, location):
     if 'windGust' in currently:
         output.append('Wind gusts {} m/s'.format(currently['windGust']))
 
+    if 'cloudCover' in currently:
+        output.append('Cloud cover {:.0f}%'.format(currently['cloudCover'] * 100))
+
     if 'visibility' in currently:
         visibility = currently['visibility']
         if visibility >= 10:
