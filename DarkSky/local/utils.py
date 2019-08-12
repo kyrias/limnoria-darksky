@@ -84,6 +84,18 @@ def format_forecast(forecast, location):
                 )
             )
 
+    if 'precipType' in currently \
+            and 'precipIntensity' in currently \
+            and 'precipProbability' in currently:
+        output.append(
+            '{type} {intensity} mm/h ({probability:.0f}%'.format(
+                type=currently['precipType'].title(),
+                intensity=round(currently['precipIntensity'], 2),
+                probability=currently['precipProbability'] * 100,
+            ),
+        )
+
+
     if 'humidity' in currently:
         output.append('Humidity {:.0f}%'.format(currently['humidity'] * 100))
 
