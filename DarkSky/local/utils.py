@@ -66,6 +66,9 @@ def format_forecast(forecast, location):
 
     output.append('Current weather for {}'.format(location.address))
 
+    if 'summary' in currently:
+        output.append(currently['summary'])
+
     if 'temperature' in currently:
         if 'apparentTemperature' in currently:
             output.append(
