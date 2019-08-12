@@ -83,7 +83,7 @@ def format_forecast(forecast, location):
             and 'precipIntensity' in currently \
             and 'precipProbability' in currently:
         output.append(
-            '{type} {intensity} mm/h ({probability:.0f}%'.format(
+            '{type} {intensity} mm/h ({probability:.0f}%)'.format(
                 type=currently['precipType'].title(),
                 intensity=round(currently['precipIntensity'], 2),
                 probability=currently['precipProbability'] * 100,
