@@ -73,7 +73,8 @@ def format_forecast(forecast, location):
         text = 'Temperature {temp:.0f} °C'.format(
             temp=currently['temperature'],
         )
-        if 'apparentTemperature' in currently:
+        if 'apparentTemperature' in currently \
+                and currently['apparentTemperature'] != currently['temperature']:
             text += ' (Feels like {apparent_temp:.0f} °C)'.format(
                 apparent_temp=currently['apparentTemperature'],
             )
