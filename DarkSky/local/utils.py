@@ -70,19 +70,15 @@ def format_forecast(forecast, location):
         output.append(currently['summary'])
 
     if 'temperature' in currently:
+        text = 'Temperature {temp:.0f} °C'.format(
+            temp=currently['temperature'],
+        )
         if 'apparentTemperature' in currently:
-            output.append(
-                'Temperature {temp:.0f} °C (Feels like {apparent_temp:.0f} °C)'.format(
-                    temp=currently['temperature'],
+            text += ' (Feels like {apparent_temp:.0f} °C)'.format(
                     apparent_temp=currently['apparentTemperature'],
                 )
             )
-        else:
-            output.append(
-                'Temperature {temp:.0f} °C'.format(
-                    temp=currently['temperature'],
-                )
-            )
+        output.append(text)
 
     if 'precipType' in currently \
             and 'precipIntensity' in currently \
@@ -94,7 +90,6 @@ def format_forecast(forecast, location):
                 probability=currently['precipProbability'] * 100,
             ),
         )
-
 
     if 'humidity' in currently:
         output.append('Humidity {:.0f}%'.format(currently['humidity'] * 100))
