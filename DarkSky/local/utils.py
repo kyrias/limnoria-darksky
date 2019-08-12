@@ -24,7 +24,7 @@ def get_forecast(key, location, retries=0):
         'forecast',
         key,
         ','.join([
-            str(location.latitude), 
+            str(location.latitude),
             str(location.longitude)
         ]),
     ])
