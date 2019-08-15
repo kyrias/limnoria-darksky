@@ -125,8 +125,8 @@ def format_forecast(forecast, location):
 
     if 'visibility' in currently:
         visibility = currently['visibility']
-        if visibility >= 10:
-            output.append('Visibility 10+ km')
+        if visibility >= 16:
+            output.append('Visibility 16+ km')
         else:
             output.append('Visibility {:.1f} km'.format(visibility))
 
