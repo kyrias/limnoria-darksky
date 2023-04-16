@@ -45,14 +45,14 @@ from .local import utils as local_utils
 
 
 class DarkSky(callbacks.Plugin):
-    """Weather lookups using the Dark Sky and GeoNames"""
+    """Weather lookups using the OpenWeather and GeoNames"""
     threaded = True
 
     def forecast(self, irc, msg, args, location):
         """<location>
 
         Looks up the given location using GeoNames and gets the forecast for
-        the retrieved coordinates from Dark Sky.
+        the retrieved coordinates from OpenWeather.
         """
         try:
             loc = local_utils.get_coordinates(

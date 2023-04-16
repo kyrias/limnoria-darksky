@@ -20,33 +20,25 @@ def get_coordinates(api_key, location):
     geonames = GoogleV3(api_key=api_key, timeout=2)
     return geonames.geocode(location)
 
-
-def get_forecast(key, location, retries=0):
-    path = '/'.join([
-        'forecast',
-        key,
-        ','.join([
-            str(location.latitude),
-            str(location.longitude)
-        ]),
-    ])
-
+def get_forecast(api_key, location, retries=0):
     query = {
-        'units': 'si',
+        'lat': str(location.latitude),
+        'lon': str(location.longitude),
+        'units': 'metric',
         'exclude': ','.join(['minutely', 'hourly', 'daily', 'alerts']),
+        'appid': api_key,
     }
 
     url = urlunsplit((
         'https',
-        'api.darksky.net',
-        path,
+        'api.openweathermap.org',
+        'data/3.0/onecall',
         urlencode(query),
         None,
     ))
 
     response = retrying_get_url_content(url, retries=retries)
     return json.loads(response)
-
 
 directions = [
     'N', 'NNE', 'NE', 'ENE',
@@ -66,67 +58,63 @@ def format_forecast(forecast, location):
 
     output.append('Current weather for {}'.format(location.address))
 
-    if 'summary' in currently:
-        output.append(currently['summary'])
+    if currently['weather']:
+        output.append(currently['weather'][0]['description'])
 
-    if 'temperature' in currently:
+    if 'temp' in currently:
         text = 'Temperature {temp:.0f} °C'.format(
-            temp=currently['temperature'],
+            temp=currently['temp'],
         )
-        if 'apparentTemperature' in currently \
-                and currently['apparentTemperature'] != currently['temperature']:
+        if 'feels_like' in currently \
+                and currently['feels_like'] != currently['temperature']:
             text += ' (Feels like {apparent_temp:.0f} °C)'.format(
-                apparent_temp=currently['apparentTemperature'],
+                apparent_temp=currently['feels_like'],
             )
         output.append(text)
 
-    if 'precipType' in currently \
-            and 'precipIntensity' in currently \
-            and 'precipProbability' in currently:
+    if 'rain' in currently:
         output.append(
-            '{type} {intensity} mm/h ({probability:.0f}%)'.format(
-                type=currently['precipType'].title(),
-                intensity=round(currently['precipIntensity'], 2),
-                probability=currently['precipProbability'] * 100,
-            ),
+            'Rain {} mm/h'.format(currently['rain']['1h']),
+        )
+
+    if 'snow' in currently:
+        output.append(
+            'Snow {} mm/h'.format(currently['snow']['1h']),
         )
 
     if 'humidity' in currently:
-        output.append('Humidity {:.0f}%'.format(currently['humidity'] * 100))
+        output.append('Humidity {:.0f}%'.format(currently['humidity']))
 
-    if 'dewPoint' in currently:
-        output.append('Dew point {:.0f}°'.format(currently['dewPoint']))
+    if 'dew_point' in currently:
+        output.append('Dew point {:.0f}°C'.format(currently['dew_point']))
 
-    if 'uvIndex' in currently:
-        output.append('UV index {}'.format(currently['uvIndex']))
+    if 'uvi' in currently:
+        output.append('UV index {}'.format(currently['uvi']))
 
     if 'pressure' in currently:
         output.append('Pressure {:.0f} hPa'.format(currently['pressure']))
 
-    if 'windSpeed' in currently:
-        fmt = 'Wind speed {speed} m/s'
-        if 'windBearing' in currently:
-            fmt += ' {cardinal} ({bearing}°)'
+    if 'wind_speed' in currently:
+        section = 'Wind speed {} m/s'.format(currently['wind_speed'])
 
-        wind_direction = (currently.get('windBearing', 0) + 180) % 360
-        output.append(
-            fmt.format(
-                speed=currently['windSpeed'],
-                cardinal=bearing_to_cardinal(wind_direction),
-                bearing=wind_direction,
+        if 'wind_deg' in currently:
+            section += ' {cardinal} ({bearing}°)'.format(
+                cardinal=bearing_to_cardinal(currently['wind_deg']),
+                bearing=currently['wind_deg'],
             )
-        )
 
-    if 'windGust' in currently:
-        output.append('Wind gusts {} m/s'.format(currently['windGust']))
+        output.append(section)
 
-    if 'cloudCover' in currently:
-        output.append('Cloud cover {:.0f}%'.format(currently['cloudCover'] * 100))
+    if 'wind_gust' in currently:
+        output.append('Wind gusts {} m/s'.format(currently['wind_gust']))
+
+    if 'clouds' in currently:
+        output.append('Cloud cover {:.0f}%'.format(currently['clouds']))
 
     if 'visibility' in currently:
         visibility = currently['visibility']
-        if visibility >= 16:
-            output.append('Visibility 16+ km')
+        if visibility >= 10:
+            output.append('Visibility 10+ km')
         else:
             output.append('Visibility {:.1f} km'.format(visibility))
 
