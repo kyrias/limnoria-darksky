@@ -118,4 +118,6 @@ def format_forecast(forecast, location):
         else:
             output.append('Visibility {:.1f} km'.format(visibility))
 
+    output.append('Provided by OpenWeather')
+
     return ' :: '.join(output)
