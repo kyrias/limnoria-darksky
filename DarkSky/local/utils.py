@@ -59,7 +59,7 @@ def format_forecast(forecast, location):
     output.append('Current weather for {}'.format(location.address))
 
     if current['weather']:
-        output.append(current['weather'][0]['description'])
+        output.append(current['weather'][0]['description'].title())
 
     if 'temp' in current:
         text = 'Temperature {temp:.0f} °C'.format(
