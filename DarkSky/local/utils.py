@@ -53,66 +53,66 @@ def bearing_to_cardinal(bearing):
 
 
 def format_forecast(forecast, location):
-    currently = forecast['currently']
+    current = forecast['current']
     output = []
 
     output.append('Current weather for {}'.format(location.address))
 
-    if currently['weather']:
-        output.append(currently['weather'][0]['description'])
+    if current['weather']:
+        output.append(current['weather'][0]['description'])
 
-    if 'temp' in currently:
+    if 'temp' in current:
         text = 'Temperature {temp:.0f} °C'.format(
-            temp=currently['temp'],
+            temp=current['temp'],
         )
-        if 'feels_like' in currently \
-                and currently['feels_like'] != currently['temperature']:
+        if 'feels_like' in current \
+                and current['feels_like'] != current['temperature']:
             text += ' (Feels like {apparent_temp:.0f} °C)'.format(
-                apparent_temp=currently['feels_like'],
+                apparent_temp=current['feels_like'],
             )
         output.append(text)
 
-    if 'rain' in currently:
+    if 'rain' in current:
         output.append(
-            'Rain {} mm/h'.format(currently['rain']['1h']),
+            'Rain {} mm/h'.format(current['rain']['1h']),
         )
 
-    if 'snow' in currently:
+    if 'snow' in current:
         output.append(
-            'Snow {} mm/h'.format(currently['snow']['1h']),
+            'Snow {} mm/h'.format(current['snow']['1h']),
         )
 
-    if 'humidity' in currently:
-        output.append('Humidity {:.0f}%'.format(currently['humidity']))
+    if 'humidity' in current:
+        output.append('Humidity {:.0f}%'.format(current['humidity']))
 
-    if 'dew_point' in currently:
-        output.append('Dew point {:.0f}°C'.format(currently['dew_point']))
+    if 'dew_point' in current:
+        output.append('Dew point {:.0f}°C'.format(current['dew_point']))
 
-    if 'uvi' in currently:
-        output.append('UV index {}'.format(currently['uvi']))
+    if 'uvi' in current:
+        output.append('UV index {}'.format(current['uvi']))
 
-    if 'pressure' in currently:
-        output.append('Pressure {:.0f} hPa'.format(currently['pressure']))
+    if 'pressure' in current:
+        output.append('Pressure {:.0f} hPa'.format(current['pressure']))
 
-    if 'wind_speed' in currently:
-        section = 'Wind speed {} m/s'.format(currently['wind_speed'])
+    if 'wind_speed' in current:
+        section = 'Wind speed {} m/s'.format(current['wind_speed'])
 
-        if 'wind_deg' in currently:
+        if 'wind_deg' in current:
             section += ' {cardinal} ({bearing}°)'.format(
-                cardinal=bearing_to_cardinal(currently['wind_deg']),
-                bearing=currently['wind_deg'],
+                cardinal=bearing_to_cardinal(current['wind_deg']),
+                bearing=current['wind_deg'],
             )
 
         output.append(section)
 
-    if 'wind_gust' in currently:
-        output.append('Wind gusts {} m/s'.format(currently['wind_gust']))
+    if 'wind_gust' in current:
+        output.append('Wind gusts {} m/s'.format(current['wind_gust']))
 
-    if 'clouds' in currently:
-        output.append('Cloud cover {:.0f}%'.format(currently['clouds']))
+    if 'clouds' in current:
+        output.append('Cloud cover {:.0f}%'.format(current['clouds']))
 
-    if 'visibility' in currently:
-        visibility = currently['visibility']
+    if 'visibility' in current:
+        visibility = current['visibility']
         if visibility >= 10:
             output.append('Visibility 10+ km')
         else:
